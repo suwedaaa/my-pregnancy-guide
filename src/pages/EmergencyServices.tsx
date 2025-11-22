@@ -7,7 +7,7 @@ const EmergencyServices = () => {
   const navigate = useNavigate();
 
   const handleCallAmbulance = () => {
-    window.location.href = "tel:911";
+    window.location.href = "tel:+447536948547";
   };
 
   const nearbyServices = [

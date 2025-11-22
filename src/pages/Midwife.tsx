@@ -6,7 +6,6 @@ import { Card } from "@/components/ui/card";
 
 type PatientMarker = {
   id: string;
-  name: string;
   weeks: number;
   status: "normal" | "emergency";
   medicalConditions?: string;
@@ -28,7 +27,6 @@ const Midwife = () => {
   const patients: PatientMarker[] = [
     {
       id: "p1",
-      name: "Sarah M.",
       weeks: 24,
       status: "normal",
       medicalConditions: "None reported",
@@ -36,7 +34,6 @@ const Midwife = () => {
     },
     {
       id: "p2",
-      name: "Emma L.",
       weeks: 32,
       status: "emergency",
       medicalConditions: "Severe headache, vision changes",
@@ -44,7 +41,6 @@ const Midwife = () => {
     },
     {
       id: "p3",
-      name: "Jessica K.",
       weeks: 18,
       status: "normal",
       medicalConditions: "Gestational diabetes",
@@ -52,7 +48,6 @@ const Midwife = () => {
     },
     {
       id: "p4",
-      name: "Maria G.",
       weeks: 36,
       status: "emergency",
       medicalConditions: "Decreased fetal movement",
@@ -60,7 +55,6 @@ const Midwife = () => {
     },
     {
       id: "p5",
-      name: "Lisa T.",
       weeks: 28,
       status: "normal",
       medicalConditions: "None reported",
@@ -189,16 +183,12 @@ const Midwife = () => {
                 <div className="flex items-start justify-between">
                   <div className="space-y-1">
                     <h3 className="text-xl font-semibold text-foreground flex items-center gap-2">
-                      {selectedMarker.name}
                       {selectedMarker.status === "emergency" ? (
                         <AlertCircle className="w-5 h-5 text-red-500" />
                       ) : (
                         <CheckCircle2 className="w-5 h-5 text-green-500" />
                       )}
                     </h3>
-                    <p className="text-sm text-muted-foreground">
-                      Patient ID: {selectedMarker.id}
-                    </p>
                   </div>
                   <Button
                     variant="ghost"

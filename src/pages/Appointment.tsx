@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Calendar, Clock, MapPin } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, MapPin, Info } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 
 const Appointment = () => {
@@ -16,9 +17,22 @@ const Appointment = () => {
   } | null>(null);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
+  const [name, setName] = useState("");
+  const [dateOfBirth, setDateOfBirth] = useState("");
+  const [isRegistered, setIsRegistered] = useState(false);
 
   useEffect(() => {
-    const weeks = parseInt(sessionStorage.getItem("weeksPregnant") || "0");
+    // Get weeks from pregnantInfo stored in PregnantInfo page
+    const pregnantInfoStr = sessionStorage.getItem("pregnantInfo");
+    let weeks = 0;
+    if (pregnantInfoStr) {
+      try {
+        const pregnantInfo = JSON.parse(pregnantInfoStr);
+        weeks = parseInt(pregnantInfo.weeks || "0");
+      } catch (error) {
+        console.error("Error parsing pregnantInfo:", error);
+      }
+    }
     setWeeksPregnant(weeks);
 
     // Calculate next appointment based on weeks pregnant
@@ -41,6 +55,14 @@ const Appointment = () => {
   }, []);
 
   const handleBookAppointment = () => {
+    if (!name.trim()) {
+      toast.error("Please enter your name");
+      return;
+    }
+    if (!dateOfBirth) {
+      toast.error("Please enter your date of birth");
+      return;
+    }
     if (!selectedDate || !selectedTime) {
       toast.error("Please select both date and time for your appointment");
       return;
@@ -49,13 +71,16 @@ const Appointment = () => {
     sessionStorage.setItem(
       "appointment",
       JSON.stringify({
+        name,
+        dateOfBirth,
+        isRegistered,
         date: selectedDate,
         time: selectedTime,
         type: nextAppointment?.description,
       })
     );
 
-    toast.success("Appointment booked successfully!");
+    toast.success("Appointment requested successfully!");
     setTimeout(() => navigate("/"), 1500);
   };
 
@@ -124,10 +149,38 @@ const Appointment = () => {
         {/* Book Appointment Form */}
         <Card className="p-6 space-y-4">
           <h2 className="text-xl font-semibold text-foreground">
-            Book Your Appointment
+            Request An Appointment For {nextAppointment?.description || "Appointment"}
           </h2>
 
           <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Full Name</Label>
+              <Input
+                id="name"
+                type="text"
+                placeholder="Enter your full name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="h-12"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="dob">Date of Birth</Label>
+              <Input
+                id="dob"
+                type="date"
+                value={dateOfBirth}
+                onChange={(e) => setDateOfBirth(e.target.value)}
+                max={new Date().toISOString().split("T")[0]}
+                className="h-12"
+              />
+            </div>
+
+            <h3 className="text-lg font-semibold text-foreground">
+            Appointment Details
+            </h3>
+
             <div className="space-y-2">
               <Label htmlFor="date">Preferred Date</Label>
               <Input
@@ -136,6 +189,7 @@ const Appointment = () => {
                 value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
                 min={new Date().toISOString().split("T")[0]}
+                className="h-12"
               />
             </div>
 
@@ -146,6 +200,7 @@ const Appointment = () => {
                 type="time"
                 value={selectedTime}
                 onChange={(e) => setSelectedTime(e.target.value)}
+                className="h-12"
               />
             </div>
 
@@ -158,6 +213,47 @@ const Appointment = () => {
                 </span>
               </div>
             </div>
+
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-4 bg-muted/50 rounded-xl">
+                <div className="space-y-0.5">
+                  <Label htmlFor="registered" className="text-base font-semibold">
+                    Are you registered at this clinic?
+                  </Label>
+                  <p className="text-sm text-muted-foreground">
+                    Check if you're already a patient here
+                  </p>
+                </div>
+                <Switch
+                  id="registered"
+                  checked={isRegistered}
+                  onCheckedChange={setIsRegistered}
+                />
+              </div>
+            </div>
+
+          </div>
+        </Card>
+
+        {/* Antenatal Care Info Button */}
+        <Card className="p-6 bg-primary/5 border-primary/20">
+          <div className="flex items-center justify-between gap-4">
+            <div className="space-y-1">
+              <p className="text-base font-semibold text-foreground">
+                Want more info about your pregnancy?
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Learn more about antenatal care personalized to your situation
+              </p>
+            </div>
+            <Button
+              variant="outline"
+              onClick={() => navigate("/antenatal-care")}
+              className="shrink-0"
+            >
+              <Info className="w-4 h-4 mr-2" />
+              Learn More
+            </Button>
           </div>
         </Card>
 
@@ -171,7 +267,7 @@ const Appointment = () => {
               onClick={handleBookAppointment}
             >
               <Calendar className="w-5 h-5 mr-2" />
-              Book Appointment
+              Request Appointment
             </Button>
           </div>
         </div>

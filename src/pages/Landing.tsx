@@ -13,7 +13,7 @@ const Landing = () => {
             <Heart className="w-10 h-10 text-primary-foreground" fill="currentColor" />
           </div>
           <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-            Mobile Midwife
+            Mobile Midwife ليبليبلي
           </h1>
           <p className="text-lg text-muted-foreground">
             Your trusted companion for pregnancy care
