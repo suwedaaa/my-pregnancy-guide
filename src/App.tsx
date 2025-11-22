@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Landing from "./pages/Landing";
 import PregnantInfo from "./pages/PregnantInfo";
 import Symptoms from "./pages/Symptoms";
+import EmergencyServices from "./pages/EmergencyServices";
+import Appointment from "./pages/Appointment";
 import Midwife from "./pages/Midwife";
 import NotFound from "./pages/NotFound";
 
@@ -21,6 +23,8 @@ const App = () => (
           <Route path="/" element={<Landing />} />
           <Route path="/pregnant-info" element={<PregnantInfo />} />
           <Route path="/symptoms" element={<Symptoms />} />
+          <Route path="/emergency-services" element={<EmergencyServices />} />
+          <Route path="/appointment" element={<Appointment />} />
           <Route path="/midwife" element={<Midwife />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
