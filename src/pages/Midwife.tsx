@@ -222,11 +222,6 @@ const Midwife = () => {
                     {selectedMarker.medicalConditions}
                   </p>
                 </div>
-                {selectedMarker.status === "emergency" && (
-                  <Button className="w-full" variant="destructive">
-                    Contact Patient
-                  </Button>
-                )}
               </>
             ) : (
               <>

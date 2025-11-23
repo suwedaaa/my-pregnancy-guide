@@ -1,22 +1,60 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { Heart } from "lucide-react";
+import { Heart, Languages } from "lucide-react";
 
 const Landing = () => {
   const navigate = useNavigate();
+  const [language, setLanguage] = useState<"en" | "ar">("en");
+
+  const translations = {
+    en: {
+      title: "Mobile Midwife",
+      subtitle: "Your trusted companion for pregnancy care",
+      midwifeButton: "I'm a Midwife",
+      pregnantButton: "I'm Pregnant",
+      tagline: "Safe • Secure • Supportive",
+    },
+    ar: {
+      title: "طبيب متنقلة",
+      subtitle: "رفيقك الموثوق لرعاية الحمل",
+      midwifeButton: "أنا طبيب",
+      pregnantButton: "أنا حامل",
+      tagline: "آمن • موثوق • داعم",
+    },
+  };
+
+  const t = translations[language];
+  const isArabic = language === "ar";
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-accent/20 flex flex-col items-center justify-center p-6">
+    <div 
+      className="min-h-screen bg-gradient-to-b from-background to-accent/20 flex flex-col items-center justify-center p-6 relative"
+      dir={isArabic ? "rtl" : "ltr"}
+    >
+      {/* Language Switcher Button */}
+      <Button
+        variant="ghost"
+        size="sm"
+        className={`absolute top-4 md:top-6 z-10 ${isArabic ? "left-4 md:left-6" : "right-4 md:right-6"}`}
+        onClick={() => setLanguage(language === "en" ? "ar" : "en")}
+      >
+        <Languages className={`w-4 h-4 ${isArabic ? "ml-2 order-2" : "mr-2"}`} />
+        <span className={isArabic ? "order-1" : ""}>{language === "en" ? "العربية" : "English"}</span>
+      </Button>
       <div className="w-full max-w-md space-y-8 animate-in fade-in duration-700">
         <div className="text-center space-y-4">
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-primary to-primary/80 shadow-lg mb-4">
             <Heart className="w-10 h-10 text-primary-foreground" fill="currentColor" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-            Mobile Midwife ليبليبلي
+          <h1 
+            className={`text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent ${isArabic ? "py-3" : ""}`}
+            style={isArabic ? { lineHeight: "1" } : {}}
+          >
+            {t.title}
           </h1>
           <p className="text-lg text-muted-foreground">
-            Your trusted companion for pregnancy care
+            {t.subtitle}
           </p>
         </div>
 
@@ -27,7 +65,7 @@ const Landing = () => {
             style={{ background: "var(--gradient-warm)" }}
             onClick={() => navigate("/midwife")}
           >
-            I'm a Midwife
+            {t.midwifeButton}
           </Button>
 
           <Button
@@ -36,12 +74,12 @@ const Landing = () => {
             className="w-full h-16 text-lg font-semibold border-2 hover:bg-accent/30 transition-all hover:scale-[1.02]"
             onClick={() => navigate("/pregnant-info")}
           >
-            I'm Pregnant
+            {t.pregnantButton}
           </Button>
         </div>
 
         <p className="text-center text-sm text-muted-foreground pt-8">
-          Safe • Secure • Supportive
+          {t.tagline}
         </p>
       </div>
     </div>
